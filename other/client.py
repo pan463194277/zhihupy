@@ -5,8 +5,10 @@ import importlib
 import json
 import time
 from urllib.parse import urlencode
+
 import requests
-from common import *
+
+from other.common import *
 
 
 class ZhihuClient:
