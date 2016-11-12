@@ -35,7 +35,7 @@ class ZHclient:
             'r': str(int(time.time() * 1000)),
             'type': 'login',
         }
-        resp = self._session.get(CAPTCHA_URL+"?"+urlencode(params))  # ,"r":1
+        resp = self.get(CAPTCHA_URL,params)  # ,"r":1
         return  resp.content
 
     def login(self, email, password, captcha ,remember_me= True ,saveCookies=True ,cookieFilename="cookies.json"):
@@ -70,4 +70,5 @@ class ZHclient:
             self._session.cookies.update(cookies_dict)
 
 
-
+    def get(self ,url ,params):
+        return self._session.get(url+"?"+urlencode(params))

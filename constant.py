@@ -15,4 +15,5 @@ LOGIN_URL = MAIN_URL + '/login/email'
 CAPTCHA_URL = MAIN_URL + '/captcha.gif'
 
 
-ROUNDTABLE_URL=MAIN_URL +'/roundtable'
+ROUNDTABLE_URL=MAIN_URL +'/roundtable'  #圆桌主界面url
+ROUNDTABLE_NEXTURL = MAIN_URL+"/r/roundtables" # 圆桌主界面"更多" ,带参数 ?offset=42
