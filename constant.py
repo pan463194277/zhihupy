@@ -17,3 +17,9 @@ CAPTCHA_URL = MAIN_URL + '/captcha.gif'
 
 ROUNDTABLE_URL=MAIN_URL +'/roundtable'  #圆桌主界面url
 ROUNDTABLE_NEXTURL = MAIN_URL+"/r/roundtables" # 圆桌主界面"更多" ,带参数 ?offset=42
+
+
+ROUNDTABLE_QUESTION =MAIN_URL+"/roundtable/{0}"
+
+#需要格式化的url ，{0}为圆桌专题类的url中包含的name,
+ROUNDTABLE_QUESTION_NEXTURL = MAIN_URL + "/r/roundtables/{0}/activities" #需要带参数 ?offset=21

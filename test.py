@@ -3,12 +3,24 @@
 '''
 
 
-from zhclient import ZHclient
+from roundtable import RoundTable
+from roundtableQuestion import RoundTableQuestion
+import json
 
 
+r= RoundTable ()
+r.loadRoundTableList()
+f = open("result.txt",'w')
+for i in r._list:
+    list =  RoundTableQuestion.getQuestionListByParent(i)
+    json.dump(json.dumps(i.__dict__),f)
+    f.write("----------------------------\n")
+    for j in list :
+        json.dump(json.dumps(j.__dict__), f)
+    f.write("\n\n\n")
+    #print (i._name ,i._href)
 
-s = '/r/roundtables?offset=42'
 
-print(s.find('offset='))
-print(s[s.find('offset=')+len('offset='):])
-
+#list ,offset = r.getNextJsonPage (126)
+#print (list )
+#print (offset)

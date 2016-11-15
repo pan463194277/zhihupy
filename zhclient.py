@@ -8,10 +8,9 @@ import requests
 import os
 import json
 import time
-import pickle
+from mongotool import MongoManager
 from urllib.parse import urlencode
 from constant import *
-
 
 
 
@@ -20,6 +19,7 @@ class ZHclient:
     def __init__(self):
         self._session = requests.Session()
         self._session.headers.update(DEFAULT_HEADER)
+        self._mongo = MongoManager()
     '''根据用户名密码登录'''
     def loginByAccount (self ,email,password):
 
@@ -72,3 +72,6 @@ class ZHclient:
 
     def get(self ,url ,params):
         return self._session.get(url+"?"+urlencode(params))
+
+
+ClientInstance = ZHclient()

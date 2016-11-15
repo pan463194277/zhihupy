@@ -5,21 +5,22 @@
     用正则匹配好累啊，其他页面会用html工具进行解析
 '''
 import re
-from zhclient import ZHclient
+import zhclient
 from constant import *
+import uuid
 from bs4 import BeautifulSoup
 class RoundTable:
         def __init__(self):
             '''初始化、登录'''
             self._list = []
-            self._client = ZHclient()
+            self._client = zhclient.ClientInstance
             self._client.loginByCookie()
 
         def getRoundTableHtml(self):
             resp = self._client._session.get(ROUNDTABLE_URL)
             return resp.content.decode()
 
-        def getRoundTableList(self ):
+        def loadRoundTableList(self):
             firstHtml = self.getRoundTableHtml()
             self.getFirst(firstHtml)
             self.getNexts()
@@ -38,7 +39,7 @@ class RoundTable:
                 img = groups.group(2)
                 name = groups.group(3)
                 visit = groups.group(4)
-                print(href, name, img, visit)
+                #print(href, name, img, visit)
                 self._list.append(RoundTableListItem(name,href,img,visit))
 
             return
@@ -48,7 +49,7 @@ class RoundTable:
             while offset !=-1 :
                 list ,offset = self.getNextJsonPage(offset)
                 self._list.extend(list)
-            print ("exit when list.length =" +str(len(self._list)))
+            #print ("exit when list.length =" +str(len(self._list)))
             return
         '''获取后续加载的item ，格式为json
             = =当写到offset =0时我突然想到getFirst是根本不用写的 ，测试了一下果然offset=0完全可以以更方便的方式获取第一页数据
@@ -61,7 +62,7 @@ class RoundTable:
             offset2 =-1
             j = self._client.get(ROUNDTABLE_NEXTURL,param).json()
 
-            html =j["htmls"] #list<str>
+            html =j["htmls"]  if "htmls" in j else [] #list<str>
             for item in html :
                 groups = re.search("href=\"(.*?)\".*?"
                                    "img\ssrc=\"(.*?)\".*?"
@@ -77,7 +78,7 @@ class RoundTable:
             if 'paging' in j  and 'next' in j['paging']:
                 s = j['paging']['next']
                 offset2 = int(s[s.find('offset=')+len('offset='):]) #截取"/r/roundtables?offset=42"中的offset值
-                print(offset2)
+                #print(offset2)
 
             return list ,offset2
 
@@ -85,7 +86,9 @@ class RoundTable:
 
 class RoundTableListItem:
     def __init__(self,name,href,img ,visit ,intro =None):
+        #self._guid = uuid.uuid1()
         self._name = name
+        self._engname =href[len("/roundtable/"):] # /roundtable/online-education ,取online-education,question类的访问地址需要用到这个参数
         self._href = href
         self._img = img
         self._visit=visit
@@ -93,10 +96,5 @@ class RoundTableListItem:
 
 
 
-r= RoundTable ()
-r.getRoundTableList()
-for i in r._list:
-    print (i._name)
-#list ,offset = r.getNextJsonPage (126)
-#print (list )
-#print (offset)
+
+
