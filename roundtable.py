@@ -1,8 +1,8 @@
 '''
-    Created by pqh on 2016/8/29.
+    Created by pqh on 2016/8/28.
 
-    知乎圆桌类，拉取圆桌数据
-    用正则匹配好累啊，其他页面会用html工具进行解析
+    知乎圆桌API，拉取圆桌数据
+    用正则匹配有点繁琐，其他页面会用html工具进行解析
 '''
 import re
 import zhclient
@@ -52,7 +52,7 @@ class RoundTable:
             #print ("exit when list.length =" +str(len(self._list)))
             return
         '''获取后续加载的item ，格式为json
-            = =当写到offset =0时我突然想到getFirst是根本不用写的 ，测试了一下果然offset=0完全可以以更方便的方式获取第一页数据
+            = =当写到offset =0时突然想到getFirst是根本不用写的 ，测试了一下果然offset=0完全可以以更方便的方式获取第一页数据
         '''
         def getNextJsonPage (self ,offset = 0):
             list =[]
@@ -88,7 +88,8 @@ class RoundTableListItem:
     def __init__(self,name,href,img ,visit ,intro =None):
         #self._guid = uuid.uuid1()
         self._name = name
-        self._engname =href[len("/roundtable/"):] # /roundtable/online-education ,取online-education,question类的访问地址需要用到这个参数
+        # 例：/roundtable/online-education ,取online-education, Question类的访问地址需要用到这个参数,也可以把它作为唯一性标识去建立索引
+        self._engname =href[len("/roundtable/"):]
         self._href = href
         self._img = img
         self._visit=visit
